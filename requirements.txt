@@ -1,0 +1,6 @@
+requests>=2.25.0
+flask
+openai
+requests
+urllib3
+ffmpeg-python
