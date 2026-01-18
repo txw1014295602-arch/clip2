@@ -1,0 +1,47 @@
+
+{
+  "enabled": true,
+  "api_type": "proxy",
+  "model_provider": "deepseek",
+  "proxy_provider": "chataiapi",
+  "api_key": "YOUR_API_KEY_HERE",
+  "base_url": "https://www.chataiapi.com/v1",
+  "model": "deepseek-r1",
+  "extra_headers": {},
+  "_comment": "配置说明",
+  "_instructions": {
+    "api_type": "可选值: 'official'(官方) 或 'proxy'(中转)",
+    "model_provider": "可选值: 'openai', 'gemini', 'deepseek', 'claude'",
+    "proxy_provider": "仅当api_type为proxy时需要，可选值: 'chataiapi', 'openrouter', 'suanli', 'custom'",
+    "api_key": "你的API密钥",
+    "base_url": "API地址，官方API会自动设置",
+    "model": "具体的模型名称",
+    "extra_headers": "额外的HTTP头信息（如有需要）"
+  },
+  "_examples": {
+    "openai_official": {
+      "enabled": true,
+      "api_type": "official",
+      "model_provider": "openai",
+      "api_key": "sk-xxxxxxxxxxxxxxxx",
+      "base_url": "https://api.openai.com/v1",
+      "model": "gpt-4o-mini"
+    },
+    "gemini_official": {
+      "enabled": true,
+      "api_type": "gemini_official",
+      "model_provider": "gemini",
+      "api_key": "your-gemini-api-key",
+      "model": "gemini-2.5-flash"
+    },
+    "deepseek_proxy": {
+      "enabled": true,
+      "api_type": "proxy",
+      "model_provider": "deepseek",
+      "proxy_provider": "chataiapi",
+      "api_key": "sk-xxxxxxxxxxxxxxxx",
+      "base_url": "https://www.chataiapi.com/v1",
+      "model": "deepseek-r1"
+    }
+  }
+}

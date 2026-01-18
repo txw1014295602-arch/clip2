@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电视剧剪辑分析系统</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        .file-list {
+            margin-bottom: 30px;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .file-name {
+            font-weight: bold;
+            color: #333;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        .result-area {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            min-height: 200px;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+        .success {
+            color: #155724;
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #c3e6cb;
+        }
+        .analysis-result {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .segment-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📺 电视剧智能剪辑分析系统</h1>
+            <p>🤖 AI驱动的剧情分析与精彩片段提取</p>
+        </div>
+
+        <div class="file-list">
+            <h3>📁 可用字幕文件 ({{ files|length }} 个)</h3>
+            {% if files %}
+                {% for file in files %}
+                <div class="file-item">
+                    <span class="file-name">{{ file }}</span>
+                    <button class="btn btn-primary" onclick="analyzeFile('{{ file }}')">
+                        🔍 分析这一集
+                    </button>
+                </div>
+                {% endfor %}
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-success" onclick="analyzeAll()" style="font-size: 16px; padding: 12px 24px;">
+                        🚀 分析所有集数
+                    </button>
+                </div>
+            {% else %}
+                <div class="error">
+                    ❌ 未找到字幕文件<br>
+                    请将字幕文件上传到当前目录，文件名应包含集数信息（如 E01, S01E01 等）
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="result-area" id="resultArea">
+            <div class="loading">
+                💡 选择字幕文件开始分析...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showLoading(message) {
+            document.getElementById('resultArea').innerHTML = 
+                `<div class="loading">⏳ ${message}</div>`;
+        }
+
+        function showError(message) {
+            document.getElementById('resultArea').innerHTML = 
+                `<div class="error">❌ ${message}</div>`;
+        }
+
+        function showSuccess(message) {
+            document.getElementById('resultArea').innerHTML = 
+                `<div class="success">✅ ${message}</div>`;
+        }
+
+        function analyzeFile(filename) {
+            showLoading(`正在分析 ${filename}...`);
+            
+            fetch('/api/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({filename: filename})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayAnalysisResult(data.data);
+                } else {
+                    showError(`分析失败: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                showError(`网络错误: ${error.message}`);
+            });
+        }
+
+        function analyzeAll() {
+            showLoading('正在分析所有集数，请稍候...');
+            
+            fetch('/api/analyze_all', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayAllResults(data.data);
+                } else {
+                    showError(`批量分析失败: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                showError(`网络错误: ${error.message}`);
+            });
+        }
+
+        function displayAnalysisResult(result) {
+            let html = `
+                <div class="analysis-result">
+                    <h3>📺 ${result.theme}</h3>
+                    <p><strong>剧情类型:</strong> ${result.genre || '未知'}</p>
+                    <p><strong>总时长:</strong> ${result.total_duration.toFixed(1)} 秒 (${(result.total_duration/60).toFixed(1)} 分钟)</p>
+                    <p><strong>内容摘要:</strong> ${result.content_summary}</p>
+                    
+                    <h4>🎬 精彩片段:</h4>
+            `;
+
+            if (result.segments && result.segments.length > 0) {
+                result.segments.forEach((segment, index) => {
+                    html += `
+                        <div class="segment-info">
+                            <h5>片段 ${index + 1}</h5>
+                            <p><strong>时间:</strong> ${segment.start_time} --> ${segment.end_time}</p>
+                            <p><strong>时长:</strong> ${segment.duration.toFixed(1)} 秒</p>
+                            <p><strong>意义:</strong> ${segment.significance}</p>
+                            <p><strong>内容:</strong> ${segment.core_content}</p>
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<p>暂无精彩片段</p>';
+            }
+
+            if (result.highlights && result.highlights.length > 0) {
+                html += '<h4>✨ 内容亮点:</h4><ul>';
+                result.highlights.forEach(highlight => {
+                    html += `<li>${highlight}</li>`;
+                });
+                html += '</ul>';
+            }
+
+            html += '</div>';
+            document.getElementById('resultArea').innerHTML = html;
+        }
+
+        function displayAllResults(results) {
+            if (!results || results.length === 0) {
+                showError('没有分析结果');
+                return;
+            }
+
+            let html = `
+                <div class="success">
+                    ✅ 成功分析 ${results.length} 集
+                </div>
+                <div class="analysis-result">
+                    <h3>📊 批量分析结果</h3>
+            `;
+
+            results.forEach(result => {
+                html += `
+                    <div class="segment-info">
+                        <h4>${result.theme}</h4>
+                        <p><strong>类型:</strong> ${result.genre || '未知'}</p>
+                        <p><strong>时长:</strong> ${result.total_duration.toFixed(1)} 秒</p>
+                        <p><strong>摘要:</strong> ${result.content_summary}</p>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            document.getElementById('resultArea').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

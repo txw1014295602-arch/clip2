@@ -1,0 +1,39 @@
+{
+  "modules": {
+    "speech_to_text": {
+      "enabled": true,
+      "provider": "qwen-plus",
+      "api_key": "sk-56e574ecb1cb4983ab0d16a76b75804e",
+      "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "model": "qwen3-tts-flash"
+    },
+    "content_analysis": {
+      "enabled": true,
+      "provider": "qwen",
+      "api_key": "sk-56e574ecb1cb4983ab0d16a76b75804e",
+      "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "model": "qwen3-max"
+    },
+    "subtitle_generation": {
+      "enabled": true,
+      "provider": "qwen",
+      "api_key": "sk-56e574ecb1cb4983ab0d16a76b75804e",
+      "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "model": "qwen3-max"
+    }
+  },
+  "paths": {
+    "input_videos": "videos",
+    "audio_cache": "audio_cache",
+    "srt_folder": "srt",
+    "output_clips": "clips",
+    "analysis_cache": "cache"
+  },
+  "processing": {
+    "audio_format": "mp3",
+    "audio_quality": "192k",
+    "max_clips_per_video": 8,
+    "min_clip_duration": 30,
+    "max_clip_duration": 300
+  }
+}

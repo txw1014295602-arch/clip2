@@ -1,0 +1,119 @@
+modules = ["python-3.12", "web"]
+run = "python main.py"
+
+[nix]
+channel = "stable-25_05"
+
+[deployment]
+run = ["sh", "-c", "python main.py"]
+
+[workflows]
+runButton = "启动电影AI分析系统"
+
+[[workflows.workflow]]
+name = "Run Complete System"
+author = 45609965
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python start_plot_clipper.py"
+
+[[workflows.workflow]]
+name = "Run Movie AI Clipper"
+author = 46204220
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python start_movie_ai_clipper.py"
+
+[[workflows.workflow]]
+name = "Run Complete Intelligent System"
+author = 46204220
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python start_complete_intelligent_system.py"
+
+[[workflows.workflow]]
+name = "Run Complete Video System"
+author = 46204220
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python start_complete_video_system.py"
+
+[[workflows.workflow]]
+name = "Run Stable System"
+author = 46204220
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python start_stable_system.py"
+
+[[workflows.workflow]]
+name = "Run Movie Subtitle Analysis"
+author = 46204220
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python start_movie_subtitle_clipper.py"
+
+[[workflows.workflow]]
+name = "Run Enhanced AI System"
+author = 46204220
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python clean_main.py"
+
+[[workflows.workflow]]
+name = "电影AI分析系统"
+author = 46524473
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python start_movie_ai_analysis.py"
+
+[[workflows.workflow]]
+name = "稳定增强剪辑系统"
+author = 46524473
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python start_stable_enhanced_system.py"
+
+[[workflows.workflow]]
+name = "Run Main System"
+author = 46524473
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python clean_main.py"
+
+[[workflows.workflow]]
+name = "后端智能剪辑系统"
+author = 46524473
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python backend_main.py"
+
+[[workflows.workflow]]
+name = "启动电影AI分析系统"
+author = 46531376
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python clean_main.py"

@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "api_type": "proxy",
+  "provider": "自定义中转",
+  "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  "api_key": "sk-56e574ecb1cb4983ab0d16a76b75804e",
+  "model": "qwen-plus"
+}
